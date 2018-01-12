@@ -13,10 +13,10 @@ describe('API', () => {
       .then(saveTestData)
       .then(() => {
        // usefulData = data;
-  
       })
       .catch();
   });
+
   describe('GET /', () => {
     it('responds with status code 200', () =>  {
       return request(server)
@@ -51,7 +51,18 @@ describe('API', () => {
             expect(200);
             expect(res.body.topics.length).to.equal(3);
             expect(res.body.topics[0].title).to.be.oneOf(['Football', 'Cooking', 'Cats']);
-        
+        });
+    }); 
+  });
+
+  describe('GET /topics/cat/articles',  () => {
+    it('responds with all the articles for selected topic', () => {
+      return request(server)
+        .get('/api/topics/cats/articles')
+        .then(res => {
+          console.log(res.body.articles);
+            expect(200);
+            expect(res.body.articles[0].belongs_to).to.equal('cats');
         });
     }); 
   });
