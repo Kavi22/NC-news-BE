@@ -4,15 +4,16 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const server = require('../server');
 const saveTestData = require('../seed/test.seed');
+
 mongoose.Promise = global.Promise;
 
 describe('API', () => {
-  // let usefulData;
+  let usefulData;
   beforeEach(() => {
    return  mongoose.connection.dropDatabase()
       .then(saveTestData)
-      .then(() => {
-       // usefulData = data;
+      .then((data) => {
+       usefulData = data;
       })
       .catch();
   });
@@ -55,7 +56,7 @@ describe('API', () => {
     }); 
   });
 
-  describe('GET /topics/cat/articles',  () => {
+  describe('GET /topics/topic_id/articles',  () => {
     it('responds with all the articles for selected topic', () => {
       return request(server)
         .get('/api/topics/cats/articles')
@@ -71,11 +72,24 @@ describe('API', () => {
       return request(server)
         .get('/api/articles')
         .then(res => {
-          console.log(res.body.articles);
             expect(200);
             expect(res.body.articles.length).to.equal(2);
             expect(res.body.articles[0].title).to.equal('Cats are great');
         });
     }); 
   });
+
+  describe('GET /articles/article_id/comments',  () => {
+    it('responds with all the comments for selected article', () => {
+      
+      const article_id = usefulData.articles[0]._id;
+        return request(server)
+        .get(`/api/articles/${article_id}/comments`)
+        .then(res => {
+              expect(200);
+              expect(res.body.comments.body).to.be.oneOf(['this is a comment', 'this is another comment']);
+      });
+    }); 
+  });
+
 });

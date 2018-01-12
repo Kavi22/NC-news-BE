@@ -6,7 +6,7 @@ exports.getTopicArticles = (req, res, next) => {
     belongs_to: chosenTopic
   }) 
   .then((articles) => {
-    if (articles.length < 1) {
+    if (!articles.length) {
       return res.status(404).json({
         message: 'No Articles Found'
       });
@@ -19,6 +19,11 @@ exports.getTopicArticles = (req, res, next) => {
 exports.getAllArticles = (req, res, next) => {
   Articles.find({})
   .then((articles) => {
+    if (!articles.length) {
+      return res.send.status(404).json({
+        message: 'No Articles Found'
+      });
+    }
     res.send({articles});
   })
   .catch(next);
