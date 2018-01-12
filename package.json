@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha ./spec",
     "start": "nodemon server.js",
-    "lint": "eslint ./",
+    "lint": "eslint ./ --fix",
     "posttest": "npm run lint",
     "precommit": "npm test"
   },

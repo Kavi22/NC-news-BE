@@ -6,29 +6,54 @@ const server = require('../server');
 const saveTestData = require('../seed/test.seed');
 mongoose.Promise = global.Promise;
 
-describe('API', function () {
-  let usefulData;
-  beforeEach(done => {
-    mongoose.connection.dropDatabase()
+describe('API', () => {
+  // let usefulData;
+  beforeEach(() => {
+   return  mongoose.connection.dropDatabase()
       .then(saveTestData)
-      .then(data => {
-        usefulData = data;
-        console.log(usefulData);
-        done();
+      .then(() => {
+       // usefulData = data;
+  
       })
-      .catch(done);
+      .catch();
   });
-  describe('GET /', function () {
-    it('responds with status code 200', function (done) {
-      request(server)
+  describe('GET /', () => {
+    it('responds with status code 200', () =>  {
+      return request(server)
         .get('/')
-        .end((err, res) => {
-          if (err) done(err);
-          else {
+        .then(res => {
             expect(res.status).to.equal(200);
-            done();
-          }
         });
     });
   });
+
+  // with callbacks
+  // describe('GET /topics', function () {
+  //   it('responds with status 200', function (done) {
+  //     return request(server)
+  //       .get('/api/topics')
+  //       .end((err, res) => {
+  //         if (err) done(err);
+  //         else {
+  //           expect(res.status).to.equal(200);
+  //           done();
+  //         }
+  //       });
+  //   });
+  // });
+
+  // with  promises
+   describe('GET /topics',  () => {
+    it('responds with all the topics', () => {
+      return request(server)
+        .get('/api/topics')
+        .then(res => {
+            expect(200);
+            expect(res.body.topics.length).to.equal(3);
+            expect(res.body.topics[0].title).to.be.oneOf(['Football', 'Cooking', 'Cats']);
+        
+        });
+    }); 
+  });
+
 });
