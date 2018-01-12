@@ -60,11 +60,22 @@ describe('API', () => {
       return request(server)
         .get('/api/topics/cats/articles')
         .then(res => {
-          console.log(res.body.articles);
             expect(200);
             expect(res.body.articles[0].belongs_to).to.equal('cats');
         });
     }); 
   });
 
+  describe('GET /articles',  () => {
+    it('responds with all the articles', () => {
+      return request(server)
+        .get('/api/articles')
+        .then(res => {
+          console.log(res.body.articles);
+            expect(200);
+            expect(res.body.articles.length).to.equal(2);
+            expect(res.body.articles[0].title).to.equal('Cats are great');
+        });
+    }); 
+  });
 });

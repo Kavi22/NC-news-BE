@@ -15,3 +15,11 @@ exports.getTopicArticles = (req, res, next) => {
   })
   .catch(next);
 };
+
+exports.getAllArticles = (req, res, next) => {
+  Articles.find({})
+  .then((articles) => {
+    res.send({articles});
+  })
+  .catch(next);
+};
