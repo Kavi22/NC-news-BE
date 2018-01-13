@@ -104,4 +104,28 @@ describe('API', () => {
     }); 
   });
 
+  describe('PUT /articles/:article_id', () => {
+    it('successfully increments votes on a certain article',  () => {
+      const article_id = usefulData.articles[0]._id;
+         return request(server)
+            .put(`/api/articles/${article_id}?vote=up`)
+            .then(res => {
+                expect(200);
+                expect(res.body.article.votes).to.equal(1);              
+        });
+    });
+    
+    it('successfully decrements votes on a certain article',  () => {
+      const article_id = usefulData.articles[0]._id;
+      console.log(usefulData.articles);
+         return request(server)
+          .put(`/api/articles/${article_id}?vote=down`)
+          .then(res => {
+           console.log(res.body.article.votes);
+             expect(200);
+             expect(res.body.article.votes).to.equal(-1);              
+        });
+    });
+  });
+
 });
