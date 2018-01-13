@@ -81,13 +81,25 @@ describe('API', () => {
 
   describe('GET /articles/article_id/comments',  () => {
     it('responds with all the comments for selected article', () => {
-      
       const article_id = usefulData.articles[0]._id;
         return request(server)
         .get(`/api/articles/${article_id}/comments`)
         .then(res => {
               expect(200);
-              expect(res.body.comments.body).to.be.oneOf(['this is a comment', 'this is another comment']);
+              expect(res.body.comments[0].body).to.be.oneOf(['this is a comment', 'this is another comment']);
+      });
+    }); 
+  });
+
+  describe('POST /articles/article_id/comments',  () => {
+    it('successfully posts a new comment to the selected article', () => {
+      const article_id = usefulData.articles[0]._id;
+        return request(server)
+        .post(`/api/articles/${article_id}/comments`)
+        .send({body: 'testing 123'})
+        .then(res => {
+              expect(200);
+              expect(res.body.comment.body).to.equal('testing 123');
       });
     }); 
   });
