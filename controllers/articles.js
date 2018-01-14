@@ -29,6 +29,8 @@ exports.getAllArticles = (req, res, next) => {
   .catch(next);
 };
 
+    // TODO: check if need to prevent votes fom decrementing if votes already 0
+
 exports.increaseDecreaseArticleVotes = (req, res, next) => {
 
   const article_id = req.params.article_id;

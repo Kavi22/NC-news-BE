@@ -74,7 +74,7 @@ describe('API', () => {
         .then(res => {
             expect(200);
             expect(res.body.articles.length).to.equal(2);
-            expect(res.body.articles[0].title).to.equal('Cats are great');
+            expect(res.body.articles[0].title).to.be.oneOf(['Cats are great', 'Football is fun']);
         });
     }); 
   });
@@ -105,7 +105,7 @@ describe('API', () => {
   });
 
   describe('PUT /articles/:article_id', () => {
-    it('successfully increments votes on a certain article',  () => {
+    it('successfully increments votes on selected  article',  () => {
       const article_id = usefulData.articles[0]._id;
          return request(server)
             .put(`/api/articles/${article_id}?vote=up`)
@@ -114,16 +114,37 @@ describe('API', () => {
                 expect(res.body.article.votes).to.equal(1);              
         });
     });
-    
-    it('successfully decrements votes on a certain article',  () => {
+
+    it('successfully decrements votes on selected  article',  () => {
       const article_id = usefulData.articles[0]._id;
-      console.log(usefulData.articles);
          return request(server)
           .put(`/api/articles/${article_id}?vote=down`)
           .then(res => {
-           console.log(res.body.article.votes);
              expect(200);
              expect(res.body.article.votes).to.equal(-1);              
+        });
+    });
+  });
+
+  describe('PUT /comments/:comment_id', () => {
+    it('successfully increments votes on selected comment',  () => {
+      const comment_id = usefulData.comments[0]._id;
+         return request(server)
+            .put(`/api/comments/${comment_id}?vote=up`)
+            .then(res => {
+                expect(200);
+                expect(res.body.comment.votes).to.equal(1);              
+        });
+    });
+
+    it('successfully decrements votes on a selected comment',  () => {
+      const comment_id = usefulData.comments[0]._id;
+         return request(server)
+         .put(`/api/comments/${comment_id}?vote=down`)
+          .then(res => {
+             expect(200);
+
+             expect(res.body.comment.votes).to.equal(-1);              
         });
     });
   });

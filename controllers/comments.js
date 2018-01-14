@@ -26,3 +26,18 @@ exports.addArticleComments = (req, res, next) => {
   })
   .catch(next);
 };
+
+exports.increaseDecreaseCommentVotes = (req, res, next) => {
+  const comment_id = req.params.comment_id;
+  const query = req.query.vote;
+
+  Comments.findById(comment_id)
+  .then(() => {
+    let addOrMinus = query === 'up' ? 1 : -1;
+    return Comments.findByIdAndUpdate(comment_id, { $inc: {votes: addOrMinus}}, {new: true});
+  })
+  .then((comment) => {
+    res.send({comment});
+  })
+  .catch(next);
+};
