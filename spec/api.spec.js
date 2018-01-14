@@ -143,9 +143,23 @@ describe('API', () => {
          .put(`/api/comments/${comment_id}?vote=down`)
           .then(res => {
              expect(200);
-
              expect(res.body.comment.votes).to.equal(-1);              
         });
+    });
+  });
+
+  // TODO: need to figure out why this still shows both comments - not deleting from test database
+  describe('DELETE /comments/:comment_id', () => {
+    it('successfully deletes the selected comment',  () => {
+      const comment_id = usefulData.comments[0]._id;
+    //  console.log(usefulData.comments);
+      return request(server)
+            .del(`/api/comments/${comment_id}`)
+            .then(res => {
+              expect(200);
+              // console.log(usefulData.comments);
+              expect(res.body.message).to.equal('Comment deleted successfully!');
+       });
     });
   });
 

@@ -41,3 +41,14 @@ exports.increaseDecreaseCommentVotes = (req, res, next) => {
   })
   .catch(next);
 };
+
+exports.deleteComment = (req, res, next) => {
+  const comment_id = req.params.comment_id;
+  Comments.findByIdAndRemove(comment_id)
+    .then(() => {
+      res.status(200).json({ 
+        message: 'Comment deleted successfully!'
+      });
+    })
+    .catch(next);
+};
