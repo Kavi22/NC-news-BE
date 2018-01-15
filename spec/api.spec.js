@@ -50,8 +50,8 @@ describe('API', () => {
     it('responds with all the topics', () => {
       return request(server)
         .get('/api/topics')
+        .expect(200)
         .then(res => {
-          expect(200);
           expect(res.body.topics.length).to.equal(3);
           expect(res.body.topics[0].title).to.be.oneOf(['Football', 'Cooking', 'Cats']);
         });
@@ -62,8 +62,8 @@ describe('API', () => {
     it('responds with all the articles for selected topic', () => {
       return request(server)
         .get('/api/topics/cats/articles')
+        .expect(200)
         .then(res => {
-          expect(200);
           expect(res.body.articles[0].belongs_to).to.equal('cats');
         });
     });
@@ -73,8 +73,8 @@ describe('API', () => {
     it('responds with all the articles', () => {
       return request(server)
         .get('/api/articles')
+        .expect(200)
         .then(res => {
-          expect(200);
           expect(res.body.articles.length).to.equal(2);
           expect(res.body.articles[0].title).to.be.oneOf(['Cats are great', 'Football is fun']);
         });
@@ -86,8 +86,8 @@ describe('API', () => {
       const article_id = usefulData.articles[0]._id;
       return request(server)
         .get(`/api/articles/${article_id}/comments`)
+        .expect(200)
         .then(res => {
-          expect(200);
           expect(res.body.comments[0].body).to.be.oneOf(['this is a comment', 'this is another comment']);
         });
     });
@@ -98,11 +98,11 @@ describe('API', () => {
       const article_id = usefulData.articles[0]._id;
       return request(server)
         .post(`/api/articles/${article_id}/comments`)
+        .expect(200)
         .send({
           body: 'testing 123'
         })
         .then(res => {
-          expect(200);
           expect(res.body.comment.body).to.equal('testing 123');
         });
     });
@@ -113,8 +113,8 @@ describe('API', () => {
       const article_id = usefulData.articles[0]._id;
       return request(server)
         .put(`/api/articles/${article_id}?vote=up`)
+        .expect(200)
         .then(res => {
-          expect(200);
           expect(res.body.article.votes).to.equal(1);
         });
     });
@@ -123,8 +123,8 @@ describe('API', () => {
       const article_id = usefulData.articles[0]._id;
       return request(server)
         .put(`/api/articles/${article_id}?vote=down`)
+        .expect(200)
         .then(res => {
-          expect(200);
           expect(res.body.article.votes).to.equal(-1);
         });
     });
@@ -133,70 +133,75 @@ describe('API', () => {
       const article_id = usefulData.articles[0]._id;
       return request(server)
         .put(`/api/articles/${article_id}?vote=test`)
+        .expect(404)
         .then(res => {
-          expect(200);
           expect(res.body.message).to.equal('input not recognised');
         });
     });
-});
-
-describe('PUT /comments/:comment_id', () => {
-  it('successfully increments votes on selected comment', () => {
-    const comment_id = usefulData.comments[0]._id;
-    return request(server)
-      .put(`/api/comments/${comment_id}?vote=up`)
-      .then(res => {
-        expect(200);
-        expect(res.body.comment.votes).to.equal(1);
-      });
   });
 
-  it('successfully decrements votes on a selected comment', () => {
-    const comment_id = usefulData.comments[0]._id;
-    return request(server)
-      .put(`/api/comments/${comment_id}?vote=down`)
-      .then(res => {
-        expect(200);
-        expect(res.body.comment.votes).to.equal(-1);
-      });
-  });
-
-  it('successfully handles bad user input', () => {
-    const comment_id = usefulData.comments[0]._id;
-    return request(server)
-      .put(`/api/articles/${comment_id}?vote=test`)
-      .then(res => {
-        expect(200);
-        expect(res.body.message).to.equal('input not recognised');
-      });
-  });
-});
-
-// TODO: need to figure out why this still shows both comments - not deleting from test database
-describe('DELETE /comments/:comment_id', () => {
-  it('successfully deletes the selected comment', () => {
-    const comment_id = usefulData.comments[0]._id;
-    //  console.log(usefulData.comments);
-    return request(server)
-      .del(`/api/comments/${comment_id}`)
-      .then(res => {
-        expect(200);
-        // console.log(usefulData.comments);
-        expect(res.body.message).to.equal('Comment deleted successfully!');
-      });
-  });
-});
-
-describe('GET /users/:username', () => {
-it('responds with profile info for selected user', () => {
-  const username = usefulData.user.username;
-  return request(server)
-    .get(`/api/users/${username}`)
-    .then(res => {
-      expect(200);
-      expect(res.body.user.username).to.equal('northcoder');
+  describe('PUT /comments/:comment_id', () => {
+    it('successfully increments votes on selected comment', () => {
+      const comment_id = usefulData.comments[0]._id;
+      return request(server)
+        .put(`/api/comments/${comment_id}?vote=up`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.comment.votes).to.equal(1);
+        });
     });
-});
-});
+
+    it('successfully decrements votes on a selected comment', () => {
+      const comment_id = usefulData.comments[0]._id;
+      return request(server)
+        .put(`/api/comments/${comment_id}?vote=down`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.comment.votes).to.equal(-1);
+        });
+    });
+
+    it('successfully handles bad user input', () => {
+      const comment_id = usefulData.comments[0]._id;
+      return request(server)
+        .put(`/api/articles/${comment_id}?vote=test`)
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal('input not recognised');
+        });
+    });
+  });
+
+  describe('DELETE /comments/:comment_id', () => {
+    it('successfully deletes the selected comment from DB', () => {
+      const comment_id = usefulData.comments[0]._id;
+      const article_id = usefulData.comments[0].belongs_to;
+
+      return request(server)
+        .del(`/api/comments/${comment_id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.message).to.equal('Comment deleted successfully!');
+          return request(server)
+            .get(`/api/articles/${article_id}/comments`)
+            .expect(200);
+          })
+          .then(res => {
+            expect(res.body.comments.length).to.equal(1);
+        });
+    });
+  });
+
+  describe('GET /users/:username', () => {
+    it('responds with profile info for selected user', () => {
+      const username = usefulData.user.username;
+      return request(server)
+        .get(`/api/users/${username}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.user.username).to.equal('northcoder');
+        });
+    });
+  });
 
 });
