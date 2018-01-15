@@ -30,6 +30,12 @@ exports.addArticleComments = (req, res, next) => {
 exports.increaseDecreaseCommentVotes = (req, res, next) => {
   const comment_id = req.params.comment_id;
   const query = req.query.vote;
+  
+  if (query !== 'up' && query !== 'down') {
+    return res.status(404).json({
+      message: 'input not recognised'
+    });
+  }
 
   Comments.findById(comment_id)
   .then(() => {

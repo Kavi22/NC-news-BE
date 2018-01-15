@@ -128,55 +128,75 @@ describe('API', () => {
           expect(res.body.article.votes).to.equal(-1);
         });
     });
-  });
 
-  describe('PUT /comments/:comment_id', () => {
-    it('successfully increments votes on selected comment', () => {
-      const comment_id = usefulData.comments[0]._id;
+    it('successfully handles bad user input', () => {
+      const article_id = usefulData.articles[0]._id;
       return request(server)
-        .put(`/api/comments/${comment_id}?vote=up`)
+        .put(`/api/articles/${article_id}?vote=test`)
         .then(res => {
           expect(200);
-          expect(res.body.comment.votes).to.equal(1);
+          expect(res.body.message).to.equal('input not recognised');
         });
     });
+});
 
-    it('successfully decrements votes on a selected comment', () => {
-      const comment_id = usefulData.comments[0]._id;
-      return request(server)
-        .put(`/api/comments/${comment_id}?vote=down`)
-        .then(res => {
-          expect(200);
-          expect(res.body.comment.votes).to.equal(-1);
-        });
-    });
+describe('PUT /comments/:comment_id', () => {
+  it('successfully increments votes on selected comment', () => {
+    const comment_id = usefulData.comments[0]._id;
+    return request(server)
+      .put(`/api/comments/${comment_id}?vote=up`)
+      .then(res => {
+        expect(200);
+        expect(res.body.comment.votes).to.equal(1);
+      });
   });
 
-  // TODO: need to figure out why this still shows both comments - not deleting from test database
-  describe('DELETE /comments/:comment_id', () => {
-    it('successfully deletes the selected comment', () => {
-      const comment_id = usefulData.comments[0]._id;
-      //  console.log(usefulData.comments);
-      return request(server)
-        .del(`/api/comments/${comment_id}`)
-        .then(res => {
-          expect(200);
-          // console.log(usefulData.comments);
-          expect(res.body.message).to.equal('Comment deleted successfully!');
-        });
-    });
+  it('successfully decrements votes on a selected comment', () => {
+    const comment_id = usefulData.comments[0]._id;
+    return request(server)
+      .put(`/api/comments/${comment_id}?vote=down`)
+      .then(res => {
+        expect(200);
+        expect(res.body.comment.votes).to.equal(-1);
+      });
   });
 
-  describe('GET /users/:username', () => {
-    it('responds with profile info for selected user', () => {
-      const username = usefulData.user.username;
-      return request(server)
-        .get(`/api/users/${username}`)
-        .then(res => {
-          expect(200);
-          expect(res.body.user.username).to.equal('northcoder');
-        });
-    });
+  it('successfully handles bad user input', () => {
+    const comment_id = usefulData.comments[0]._id;
+    return request(server)
+      .put(`/api/articles/${comment_id}?vote=test`)
+      .then(res => {
+        expect(200);
+        expect(res.body.message).to.equal('input not recognised');
+      });
   });
-  
+});
+
+// TODO: need to figure out why this still shows both comments - not deleting from test database
+describe('DELETE /comments/:comment_id', () => {
+  it('successfully deletes the selected comment', () => {
+    const comment_id = usefulData.comments[0]._id;
+    //  console.log(usefulData.comments);
+    return request(server)
+      .del(`/api/comments/${comment_id}`)
+      .then(res => {
+        expect(200);
+        // console.log(usefulData.comments);
+        expect(res.body.message).to.equal('Comment deleted successfully!');
+      });
+  });
+});
+
+describe('GET /users/:username', () => {
+it('responds with profile info for selected user', () => {
+  const username = usefulData.user.username;
+  return request(server)
+    .get(`/api/users/${username}`)
+    .then(res => {
+      expect(200);
+      expect(res.body.user.username).to.equal('northcoder');
+    });
+});
+});
+
 });
