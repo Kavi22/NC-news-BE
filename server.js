@@ -20,6 +20,15 @@ app.get('/', function (req, res) {
 });
 
 app.use('/api', apiRouter);
+app.use((err, req, res, next) => {
+  if (err.status === 404) return res.status(404).send({ msg: err.msg });
+  if (err.status === 400) return res.status(400).send({ msg: err.msg });
+  next(err);
+});
+
+app.use((err, req, res) => {
+  res.status(500).send({ err });
+});
 
 app.listen(PORT, function () {
   console.log(`listening on port ${PORT}`);

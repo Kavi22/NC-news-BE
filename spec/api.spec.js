@@ -104,6 +104,12 @@ describe('API', () => {
         })
         .then(res => {
           expect(res.body.comment.body).to.equal('testing 123');
+          return request(server)
+          .get(`/api/articles/${article_id}/comments`)
+          .expect(200);   
+        })
+        .then(res => {
+          expect(res.body.comments.length).to.equal(3);
         });
     });
   });
@@ -111,12 +117,19 @@ describe('API', () => {
   describe('PUT /articles/:article_id', () => {
     it('successfully increments votes on selected  article', () => {
       const article_id = usefulData.articles[0]._id;
+      const old_vote = usefulData.articles[0].votes;
       return request(server)
         .put(`/api/articles/${article_id}?vote=up`)
         .expect(200)
         .then(res => {
-          expect(res.body.article.votes).to.equal(1);
+          expect(res.body.article.votes).to.equal(old_vote + 1);
+          // return request(server)
+          // .get(`/api/articles/${article_id}`)
+          // .expect(200);
         });
+        // .then(res => {
+        //   console.log(res);
+        // });
     });
 
     it('successfully decrements votes on selected  article', () => {
@@ -143,12 +156,20 @@ describe('API', () => {
   describe('PUT /comments/:comment_id', () => {
     it('successfully increments votes on selected comment', () => {
       const comment_id = usefulData.comments[0]._id;
+      // const article_id = usefulData.articles[0]._id;
       return request(server)
         .put(`/api/comments/${comment_id}?vote=up`)
         .expect(200)
         .then(res => {
           expect(res.body.comment.votes).to.equal(1);
+          // return request(server)
+          // .get(`/api/articles/${article_id}/comments`)
+          // .expect(200);
         });
+        // .then(res => {
+        //   console.log(res.body.comments.votes);
+        //   // expect(res.body.comments.votes)
+        // });
     });
 
     it('successfully decrements votes on a selected comment', () => {

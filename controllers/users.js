@@ -10,5 +10,12 @@ exports.getUsers = (req, res, next) => {
         user
       });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') return next({
+        err,
+        status: 400,
+        msg: 'Invalid Username'
+      });
+      next(err);
+    });
 };
