@@ -68,14 +68,6 @@ describe('API', () => {
           expect(res.body.articles[0].belongs_to).to.equal(topic);
         });
     });
-    it('responds with 400 status when an invalid  id has been passed', () => {
-      return request(server)
-        .get(`/api/topics/true/articles`)
-        .expect(400)
-        .then(res => {
-          expect(res.body.msg).to.equal('Invalid topic');
-        });
-    });
   });
 
   describe('GET /articles', () => {
@@ -98,6 +90,14 @@ describe('API', () => {
         .expect(200)
         .then(res => {
           expect(res.body.comments[0].body).to.be.oneOf(['this is a comment', 'this is another comment']);
+        });
+    });
+    it('responds with 400 when incorrect article id has been passed', () => {
+      return request(server)
+        .get(`/api/articles/1/comments`)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal('Invalid Article ID');
         });
     });
   });
