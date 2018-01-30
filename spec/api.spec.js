@@ -60,11 +60,20 @@ describe('API', () => {
 
   describe('GET /topics/topic_id/articles', () => {
     it('responds with all the articles for selected topic', () => {
+      const topic = usefulData.topics[0].slug;
       return request(server)
-        .get('/api/topics/cats/articles')
+        .get(`/api/topics/${topic}/articles`)
         .expect(200)
         .then(res => {
-          expect(res.body.articles[0].belongs_to).to.equal('cats');
+          expect(res.body.articles[0].belongs_to).to.equal(topic);
+        });
+    });
+    it('responds with 400 status when an invalid  id has been passed', () => {
+      return request(server)
+        .get(`/api/topics/true/articles`)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal('Invalid topic');
         });
     });
   });

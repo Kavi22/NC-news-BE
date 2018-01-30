@@ -15,15 +15,10 @@ exports.getTopicArticles = (req, res, next) => {
       res.send({
         articles
       });
+    })
+    .catch((err) => {
+      next(err);
     });
-    // .catch((err) => {
-    //   if (err.name === 'CastError') return next({
-    //     err,
-    //     status: 400,
-    //     msg: 'Invalid topic'
-    //   });
-    //   next(err);
-    // });
 };
 
 exports.getAllArticles = (req, res, next) => {
