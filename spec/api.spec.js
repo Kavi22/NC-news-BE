@@ -48,12 +48,13 @@ describe('API', () => {
   // with  promises
   describe('GET /topics', () => {
     it('responds with all the topics', () => {
+      const topic = usefulData.topics[0].title;
       return request(server)
         .get('/api/topics')
         .expect(200)
         .then(res => {
           expect(res.body.topics.length).to.equal(3);
-          expect(res.body.topics[0].title).to.be.oneOf(['Football', 'Cooking', 'Cats']);
+          expect(res.body.topics[0].title).to.equal(topic);
         });
     });
   });
@@ -72,12 +73,14 @@ describe('API', () => {
 
   describe('GET /articles', () => {
     it('responds with all the articles', () => {
+      const article_title = usefulData.articles[0].title;
+
       return request(server)
         .get('/api/articles')
         .expect(200)
         .then(res => {
           expect(res.body.articles.length).to.equal(2);
-          expect(res.body.articles[0].title).to.be.oneOf(['Cats are great', 'Football is fun']);
+          expect(res.body.articles[0].title).to.equal(article_title);
         });
     });
   });
@@ -85,11 +88,12 @@ describe('API', () => {
   describe('GET /articles/article_id/comments', () => {
     it('responds with all the comments for selected article', () => {
       const article_id = usefulData.articles[0]._id;
+      const comment_body = usefulData.comments[0].body;
       return request(server)
         .get(`/api/articles/${article_id}/comments`)
         .expect(200)
         .then(res => {
-          expect(res.body.comments[0].body).to.be.oneOf(['this is a comment', 'this is another comment']);
+          expect(res.body.comments[0].body).to.equal(comment_body);
         });
     });
     it('responds with 400 when incorrect article id has been passed', () => {
@@ -143,11 +147,12 @@ describe('API', () => {
 
     it('successfully decrements votes on selected  article', () => {
       const article_id = usefulData.articles[0]._id;
+      const old_vote = usefulData.articles[0].votes;
       return request(server)
         .put(`/api/articles/${article_id}?vote=down`)
         .expect(200)
         .then(res => {
-          expect(res.body.article.votes).to.equal(-1);
+          expect(res.body.article.votes).to.equal(old_vote - 1);
         });
     });
 
@@ -165,12 +170,13 @@ describe('API', () => {
   describe('PUT /comments/:comment_id', () => {
     it('successfully increments votes on selected comment', () => {
       const comment_id = usefulData.comments[0]._id;
+      const old_vote = usefulData.comments[0].votes;
       // const article_id = usefulData.articles[0]._id;
       return request(server)
         .put(`/api/comments/${comment_id}?vote=up`)
         .expect(200)
         .then(res => {
-          expect(res.body.comment.votes).to.equal(1);
+          expect(res.body.comment.votes).to.equal(old_vote + 1);
           // return request(server)
           // .get(`/api/articles/${article_id}/comments`)
           // .expect(200);
@@ -183,11 +189,12 @@ describe('API', () => {
 
     it('successfully decrements votes on a selected comment', () => {
       const comment_id = usefulData.comments[0]._id;
+      const old_vote = usefulData.comments[0].votes;
       return request(server)
         .put(`/api/comments/${comment_id}?vote=down`)
         .expect(200)
         .then(res => {
-          expect(res.body.comment.votes).to.equal(-1);
+          expect(res.body.comment.votes).to.equal(old_vote - 1);
         });
     });
 
@@ -206,6 +213,7 @@ describe('API', () => {
     it('successfully deletes the selected comment from DB', () => {
       const comment_id = usefulData.comments[0]._id;
       const article_id = usefulData.comments[0].belongs_to;
+      const comments = usefulData.comments.length;
 
       return request(server)
         .del(`/api/comments/${comment_id}`)
@@ -217,7 +225,7 @@ describe('API', () => {
             .expect(200);
           })
           .then(res => {
-            expect(res.body.comments.length).to.equal(1);
+            expect(res.body.comments.length).to.equal(comments - 1);
         });
     });
   });
@@ -229,7 +237,7 @@ describe('API', () => {
         .get(`/api/users/${username}`)
         .expect(200)
         .then(res => {
-          expect(res.body.user.username).to.equal('northcoder');
+          expect(res.body.user.username).to.equal(username);
         });
     });
   });
