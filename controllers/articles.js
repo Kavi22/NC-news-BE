@@ -37,6 +37,27 @@ exports.getAllArticles = (req, res, next) => {
     .catch(next);
 };
 
+exports.getArticle = (req, res, next) => {
+  const chosenArticle = req.params.article_id;
+  Articles.find({
+      _id: chosenArticle
+    })
+    .then((article) => {
+      if (!article.length) {
+        return next({
+          status: 404,
+          msg: 'No Article Found'
+        });
+      }
+      res.send({
+        article
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 exports.increaseDecreaseArticleVotes = (req, res, next) => {
 
   const article_id = req.params.article_id;

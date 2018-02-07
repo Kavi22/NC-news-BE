@@ -74,13 +74,25 @@ describe('API', () => {
   describe('GET /articles', () => {
     it('responds with all the articles', () => {
       const article_title = usefulData.articles[0].title;
-
       return request(server)
         .get('/api/articles')
         .expect(200)
         .then(res => {
           expect(res.body.articles.length).to.equal(2);
           expect(res.body.articles[0].title).to.equal(article_title);
+        });
+    });
+  });
+
+  describe('GET /articles/article_id', () => {
+    it('responds with  the selected article', () => {
+      const article_id = usefulData.articles[0]._id;
+      return request(server)
+        .get(`/api/articles/${article_id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.article.length).to.equal(1);
+          expect(res.body.article[0]._id).to.equal(`${article_id}`);
         });
     });
   });
@@ -136,6 +148,7 @@ describe('API', () => {
         .expect(200)
         .then(res => {
           expect(res.body.article.votes).to.equal(old_vote + 1);
+          // console.log(usefulData)
           // return request(server)
           // .get(`/api/articles/${article_id}`)
           // .expect(200);
