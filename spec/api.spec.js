@@ -84,7 +84,7 @@ describe('API', () => {
     });
   });
 
-//TODO: check why the last expect needs to be a template literal?
+// TODO: check why the last expect needs to be a template literal?
   describe('GET /articles/article_id', () => {
     it('responds with  the selected article', () => {
       const article_id = usefulData.articles[0]._id;
