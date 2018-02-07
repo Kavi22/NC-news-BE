@@ -143,19 +143,19 @@ describe('API', () => {
     it('successfully increments votes on selected  article', () => {
       const article_id = usefulData.articles[0]._id;
       const old_vote = usefulData.articles[0].votes;
+      console.log(old_vote);
       return request(server)
         .put(`/api/articles/${article_id}?vote=up`)
         .expect(200)
         .then(res => {
           expect(res.body.article.votes).to.equal(old_vote + 1);
-          // console.log(usefulData)
-          // return request(server)
-          // .get(`/api/articles/${article_id}`)
-          // .expect(200);
+          return request(server)
+          .get(`/api/articles/${article_id}`)
+          .expect(200);
+        })
+        .then(res => {
+          expect(res.body.article[0].votes).to.equal(old_vote + 1);
         });
-        // .then(res => {
-        //   console.log(res);
-        // });
     });
 
     it('successfully decrements votes on selected  article', () => {
