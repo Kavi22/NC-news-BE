@@ -24,7 +24,7 @@ exports.getTopicArticles = (req, res, next) => {
 exports.getAllArticles = (req, res, next) => {
   Articles.find({})
     .then((articles) => {
-      if (!articles.length) {
+      if (!articles) {
         return next({
           status: 404,
           msg: 'No Articles Found'
@@ -38,12 +38,11 @@ exports.getAllArticles = (req, res, next) => {
 };
 
 exports.getArticle = (req, res, next) => {
-  const chosenArticle = req.params.article_id;
-  Articles.find({
-      _id: chosenArticle
-    })
+  const {article_id} = req.params;
+
+  Articles.findById(article_id)
     .then((article) => {
-      if (!article.length) {
+      if (!article) {
         return next({
           status: 404,
           msg: 'No Article Found'
@@ -60,10 +59,10 @@ exports.getArticle = (req, res, next) => {
 
 exports.increaseDecreaseArticleVotes = (req, res, next) => {
 
-  const article_id = req.params.article_id;
-  const query = req.query.vote;
+  const {article_id} = req.params;
+  const {vote} = req.query;
 
-  if (query !== 'up' && query !== 'down') {
+  if (vote !== 'up' && vote !== 'down') {
     return res.status(404).json({
       message: 'input not recognised'
     });
@@ -71,7 +70,7 @@ exports.increaseDecreaseArticleVotes = (req, res, next) => {
 
   Articles.findById(article_id)
     .then(() => {
-      let addOrMinus = query === 'up' ? 1 : -1;
+      let addOrMinus = vote === 'up' ? 1 : -1;
       return Articles.findByIdAndUpdate(article_id, {
         $inc: {
           votes: addOrMinus
@@ -86,11 +85,6 @@ exports.increaseDecreaseArticleVotes = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return next({
-        err,
-        status: 400,
-        msg: 'Invalid ID'
-      });
       next(err);
     });
 };

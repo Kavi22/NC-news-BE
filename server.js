@@ -2,6 +2,7 @@ if (!process.env.NODE_ENV) process.env.NODE_ENV = 'dev';
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
 const {apiRouter} = require('./routers/api');
@@ -15,15 +16,19 @@ mongoose.connect(db, () => {
 });
 
 app.use(bodyParser.json());
+// TODO: what does Cors even do again?!
+
+app.use(cors());
+
 app.get('/', function (req, res) {
   res.status(200).send('All good!');
 });
 
 app.use('/api', apiRouter);
+
 app.use((err, req, res, next) => {
-  if (err.status === 404) return res.status(404).send({ msg: err.msg });
-  if (err.status === 400) return res.status(400).send({ msg: err.msg });
-  next(err);
+  if (!err.status) return next(err);
+  return res.status(err.status).send({ msg: err.msg });
 });
 
 app.use((err, req, res) => {
