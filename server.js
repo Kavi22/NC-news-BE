@@ -16,7 +16,6 @@ mongoose.connect(db, () => {
 });
 
 app.use(bodyParser.json());
-// TODO: what does Cors even do again?!
 
 app.use(cors());
 

@@ -12,11 +12,6 @@ exports.getArticleComments = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return next({
-        err,
-        status: 400,
-        msg: 'Invalid Article ID'
-      });
       next(err);
     });
 };

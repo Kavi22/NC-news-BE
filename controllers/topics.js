@@ -2,8 +2,12 @@ const Topics = require('../models/topics');
 
 exports.getTopics = (req, res, next) => {
   Topics.find({})
+  // .sort({
+  //   title: 'asc'
+  // })
+  // .lean()
   .then((topics) => {
-    if (!topics.length) {
+    if (!topics) {
       return next({
         status: 404,
         msg: 'No Topics Found'
@@ -11,6 +15,7 @@ exports.getTopics = (req, res, next) => {
     }
     res.send({topics});
   })
-  .catch(next);
+  .catch((err) => {
+    next(err);
+  });
 };
-
