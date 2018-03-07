@@ -1,52 +1,82 @@
-## Northcoders News API
+# Northcoders News API
 
-### Background
+## About
+A RESTful API for Northcoders News, a news aggregation site. 
 
-We will be building an API which we will be using later on during the
-Front End block of the course. Your mongoose models and a Database seed file have been done for you.
+Built using 
+* Node.js (v7.9.0)
+* Express.js (v4.14.0)
+* MongoDB (v2.6.10)
+* Mongoose(v.4.7.0)
 
-A working version of the API has been built for you to interact with. Look closely at the response you get for each route on [http://northcoders-news-api.herokuapp.com/](http://northcoders-news-api.herokuapp.com/). You will notice that we also send data such as the comment and vote count for each article. You will need to think carefully about how to do this in your API.
+## Set Up
+To check if Node.js is installed on your machine open a terminal window and enter:
 
-You will need to get all your routes built up first as you can share the functionality between you `GET comments by id` route and the comment count on the articles response for example.
+```node -v```
 
-### Mongoose Documentation
+If you do not already have Node.js installed please follow the instructions on [this guide](https://nodejs.org/en/download/package-manager/).
 
-The below are all model methods that you call on your models.
+To check if npm is installed on your machine enter this command in you terminal window: 
 
-* [find](http://mongoosejs.com/docs/api.html#model_Model.find)
-* [findOne](http://mongoosejs.com/docs/api.html#model_Model.findOne)
-* [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
-* [findOneAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findOneAndRemove)
-* [findById](http://mongoosejs.com/docs/api.html#model_Model.findById)
-* [findByIdAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate)
-* [findByIdAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove)
-* [update](http://mongoosejs.com/docs/api.html#model_Model.update)
+```npm -v```
 
-There are also some methods that can be called on new or retrieved documents. These are:
+If you do not have npm already installed please follow [this guide](https://www.npmjs.com/get-npm) to set it up.
 
-* [remove](http://mongoosejs.com/docs/api.html#model_Model-remove)
-* [save](http://mongoosejs.com/docs/api.html#model_Model-save)
-* [count](http://mongoosejs.com/docs/api.html#model_Model.count)
+To check if git is installed on your machine please enter the following command in your terminal window: 
 
-### Tasks
+```git --version```
 
-1. Seed your database with the main seed file `$ node seed/seed.js`
-2. Build your express App
-3. Mount an API Router onto your app
-4. Define the routes described below using TDD
-5. Define controller functions for each of your routes
-6. Once you have all your routes, tackle adding the vote and comment counts to every article when the articles are requested. Here is an example of what the response should look like: [http://northcoders-news-api.herokuapp.com/api/articles](http://northcoders-news-api.herokuapp.com/api/articles). You will need to use [Async.js](https://caolan.github.io/async/) or Promises. The [Bluebird](http://bluebirdjs.com/docs/api-reference.html) library provides extended functionality for Promises and may come in handy.
+If you do not already have git installed on your machine please follow [this guide](https://git-scm.com/).
 
-### Routes
+If you do not have MongoDB already installed, please follow [this guide](https://docs.mongodb.com/manual/installation/)
+
+#* Installation
+
+To run this project on your local machine you will need to clone it onto your machine and install all dependencies.
+
+To do so use the command line to navigate to your preferred directory on your local machine and enter the following command in the terminal window:
+
+```git clone https://github.com/Kavi22/NC-news-BE.git```
+
+Navigate inside the folder and install all dependencies by entering the following command on your terminal window: 
+
+```npm install```
+
+ Enter the following command in your terminal window to connect to the database and keep it running: 
+
+```mongod```
+
+Open another terminal window, navigate inside the project folder and enter the following command to populate the database: 
+
+```node seed/seed.js```
+
+Finally to run the server enter the following command in your terminal window: 
+
+```npm start```
+
+This will run the server on port 3000. All endpoints can be found locally on http://localhost:3000 .
+
+## Testing
+
+Testing was carried out using Mocha, Chai and Supertest.
+To test the API navigate to the project directory and enter the following command
+
+```npm test```
+
+
+## API Routes
 
 | Route |   |
 | ------|---|
 | `GET /api/topics` | Get all the topics |
 | `GET /api/topics/:topic_id/articles` | Return all the articles for a certain topic |
 | `GET /api/articles` | Returns all the articles |
+| `GET /api/articles/:article_id` | Returns selected article |
 | `GET /api/articles/:article_id/comments` | Get all the comments for a individual article |
 | `POST /api/articles/:article_id/comments` | Add a new comment to an article. This route requires a JSON body with a comment key and value pair e.g: {"comment": "This is my new comment"} |
 | `PUT /api/articles/:article_id` | Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down' e.g: /api/articles/:article_id?vote=up |
 | `PUT /api/comments/:comment_id` | Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down' e.g: /api/comments/:comment_id?vote=down |
 | `DELETE /api/comments/:comment_id` | Deletes a comment |
 | `GET /api/users/:username` | Returns a JSON object with the profile data for the specified user. |
+
+
