@@ -5,7 +5,7 @@ function validateArticleId(req, res, next) {
   if (!mongoose.Types.ObjectId.isValid(article_id)) {
     return next({
       status: 400,
-      msg: 'Invalid id'
+      msg: `Invalid article id : ${article_id}`
     });
   }
   next();

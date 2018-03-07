@@ -59,7 +59,7 @@ describe('API/ARTICLES', () => {
           .expect(400)
           .then(res => {
             expect(res.status).to.equal(400);
-            expect(res.body.msg).to.equal('Invalid id');
+            expect(res.body.msg).to.equal(`Invalid article id : ${article_id}`);
           });
       });
     });
@@ -89,7 +89,7 @@ describe('API/ARTICLES', () => {
           .expect(400)
           .then(res => {
             expect(res.status).to.equal(400);
-            expect(res.body.msg).to.equal('Invalid id');
+            expect(res.body.msg).to.equal(`Invalid article id : ${article_id}`);
           });
       });
       it('returns 404 when article has no comments', () => {
@@ -133,7 +133,7 @@ describe('API/ARTICLES', () => {
         .expect(400)
         .then(res => {
           expect(res.status).to.equal(400);
-          expect(res.body.msg).to.equal('Invalid id');
+          expect(res.body.msg).to.equal(`Invalid article id : ${article_id}`);
         });
     });
   });
@@ -183,7 +183,7 @@ describe('API/ARTICLES', () => {
         .expect(400)
         .then(res => {
           expect(res.status).to.equal(400);
-          expect(res.body.msg).to.equal('Invalid id');
+          expect(res.body.msg).to.equal(`Invalid article id : ${article_id}`);
         });
     });
 
