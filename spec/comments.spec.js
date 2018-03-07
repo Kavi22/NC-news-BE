@@ -65,7 +65,7 @@ describe('API/COMMENTS', () => {
       const {_id} = usefulData.comments[0];
       const test = 'test';
       return request(server)
-        .put(`/api/articles/${_id}?vote=${test}`)
+        .put(`/api/comments/${_id}?vote=${test}`)
         .expect(404)
         .then(res => {
           expect(res.body.message).to.equal('input not recognised');
@@ -75,34 +75,44 @@ describe('API/COMMENTS', () => {
     it('returns 400 when incorrect comment id has been passed', () => {
       const comment_id = 1;
       return request(server)
-        .put(`/api/articles/${comment_id}/?vote=down`)
+        .put(`/api/comments/${comment_id}/?vote=down`)
         .expect(400)
         .then(res => {
           expect(res.status).to.equal(400);
-          expect(res.body.msg).to.equal(`Invalid article id : ${comment_id}`);
+          expect(res.body.msg).to.equal(`Invalid comment id : ${comment_id}`);
         });
     });
   });
 
-  describe('DELETE /comments/:comment_id', () => {
-    it('successfully deletes the selected comment from DB', () => {
-      const comment_id = usefulData.comments[0]._id;
-      const article_id = usefulData.comments[0].belongs_to;
+  describe.only('DELETE /comments/:comment_id', () => {
+    it('returns 200 and successfully deletes the selected comment from DB', () => {
+      const {_id, belongs_to} = usefulData.comments[0];
       const comments = usefulData.comments.length;
 
       return request(server)
-        .del(`/api/comments/${comment_id}`)
+        .del(`/api/comments/${_id}`)
         .expect(200)
         .then(res => {
-          expect(res.body.message).to.equal('Comment deleted successfully!');
+          expect(res.body.msg).to.equal('Comment deleted successfully!');
           return request(server)
-            .get(`/api/articles/${article_id}/comments`)
+            .get(`/api/articles/${belongs_to}/comments`)
             .expect(200);
           })
           .then(res => {
             expect(res.body.comments.length).to.equal(comments - 1);
         });
     });
-  });
 
+    it('returns 400 and msg if invalid comment Id', () => {
+      const commentId = 1;
+
+      return request (server)
+        .delete(`/api/comments/${commentId}`)
+        .expect(400)
+        .then(res => {
+          expect(res.status).to.equal(400);
+          expect(res.body.msg).to.equal(`Invalid comment id : ${commentId}`);
+        });
+    });
+  });
 });

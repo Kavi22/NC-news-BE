@@ -16,7 +16,7 @@ function validateCommentId(req, res, next) {
   if (!mongoose.Types.ObjectId.isValid(comment_id)) {
     return next({
       status: 400,
-      msg: `Invalid article id : ${comment_id}`
+      msg: `Invalid comment id : ${comment_id}`
     });
   }
   next();

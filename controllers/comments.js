@@ -41,10 +41,10 @@ exports.addArticleComments = (req, res, next) => {
 };
 
 exports.increaseDecreaseCommentVotes = (req, res, next) => {
-  const comment_id = req.params.comment_id;
-  const query = req.query.vote;
+  const {comment_id} = req.params;
+  const {vote} = req.query;
 
-  if (query !== 'up' && query !== 'down') {
+  if (vote !== 'up' && vote !== 'down') {
     return res.status(404).json({
       message: 'input not recognised'
     });
@@ -52,7 +52,7 @@ exports.increaseDecreaseCommentVotes = (req, res, next) => {
 
   Comments.findById(comment_id)
     .then(() => {
-      let addOrMinus = query === 'up' ? 1 : -1;
+      let addOrMinus = vote === 'up' ? 1 : -1;
       return Comments.findByIdAndUpdate(comment_id, {
         $inc: {
           votes: addOrMinus
@@ -67,29 +67,21 @@ exports.increaseDecreaseCommentVotes = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return next({
-        err,
-        status: 400,
-        msg: 'Invalid Comment ID'
-      });
       next(err);
     });
 };
 
 exports.deleteComment = (req, res, next) => {
-  const comment_id = req.params.comment_id;
+  const {comment_id} = req.params;
+
   Comments.findByIdAndRemove(comment_id)
-    .then(() => {
-      res.status(200).json({
-        message: 'Comment deleted successfully!'
+    .then((comment) => {
+      res.send({
+        comment,
+        msg: 'Comment deleted successfully!'
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return next({
-        err,
-        status: 400,
-        msg: 'Invalid Comment ID'
-      });
       next(err);
     });
 };
