@@ -23,13 +23,15 @@ describe('API/ARTICLES', () => {
   describe('ALL GET REQUESTS', () => {
     describe('GET /', () => {
       it('responds with all the articles', () => {
-        const article_title = usefulData.articles[0].title;
+        const articles_length = usefulData.articles.length;
         return request(server)
           .get('/api/articles')
           .expect(200)
           .then(res => {
-            expect(res.body.articles.length).to.equal(2);
-            expect(res.body.articles[0].title).to.equal(article_title);
+            expect(res.body.articles.length).to.equal(articles_length);
+            res.body.articles.forEach(article => {
+              expect(article.title).to.be.a('string');
+            });
           });
       });
     });
@@ -43,6 +45,16 @@ describe('API/ARTICLES', () => {
           .expect(200)
           .then(res => {
             expect(res.body.article._id).to.equal(`${article_id}`);
+          });
+      });
+      it('responds with 400 when incorrect article id has been passed', () => {
+        const article_id = 1;
+        return request(server)
+          .get(`/api/articles/${article_id}`)
+          .expect(400)
+          .then(res => {
+            expect(res.status).to.equal(400);
+            expect(res.body.msg).to.equal('Invalid id');
           });
       });
     });
@@ -59,10 +71,12 @@ describe('API/ARTICLES', () => {
           });
       });
       it('responds with 400 when incorrect article id has been passed', () => {
+        const article_id = 1;
         return request(server)
-          .get(`/api/articles/1/comments`)
+          .get(`/api/articles/${article_id}/comments`)
           .expect(400)
           .then(res => {
+            expect(res.status).to.equal(400);
             expect(res.body.msg).to.equal('Invalid id');
           });
       });
@@ -86,6 +100,16 @@ describe('API/ARTICLES', () => {
         })
         .then(res => {
           expect(res.body.comments.length).to.equal(3);
+        });
+    });
+    it('responds with 400 when incorrect article id has been passed', () => {
+      const article_id = 1;
+      return request(server)
+        .post(`/api/articles/${article_id}/comments`)
+        .expect(400)
+        .then(res => {
+          expect(res.status).to.equal(400);
+          expect(res.body.msg).to.equal('Invalid id');
         });
     });
   });
@@ -122,6 +146,17 @@ describe('API/ARTICLES', () => {
         })
         .then(res => {
           expect(res.body.article.votes).to.equal(old_vote - 1);
+        });
+    });
+
+    it('responds with 400 when incorrect article id has been passed', () => {
+      const article_id = 1;
+      return request(server)
+        .put(`/api/articles/${article_id}/?vote=down`)
+        .expect(400)
+        .then(res => {
+          expect(res.status).to.equal(400);
+          expect(res.body.msg).to.equal('Invalid id');
         });
     });
 
