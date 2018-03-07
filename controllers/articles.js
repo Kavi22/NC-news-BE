@@ -1,15 +1,15 @@
 const Articles = require('../models/articles');
 
 exports.getTopicArticles = (req, res, next) => {
-  const chosenTopic = req.params.topic_id;
+  const {topic_id} = req.params;
   Articles.find({
-      belongs_to: chosenTopic
+      belongs_to: topic_id
     })
     .then((articles) => {
       if (!articles.length) {
         return next({
           status: 404,
-          msg: 'No Articles Found'
+          msg: `No articles found for topic with ${topic_id}`
         });
       }
       res.send({
