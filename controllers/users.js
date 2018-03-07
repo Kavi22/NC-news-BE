@@ -1,21 +1,23 @@
 const Users = require('../models/users');
 
 exports.getUsers = (req, res, next) => {
-  const userName = req.params.username;
+const {username} = req.params;
+
   Users.findOne({
-      username: userName
+      username
     })
     .then((user) => {
+      if (!user) {
+        return next({
+          status: 404,
+          msg: `Username, ${username}, is not been used by anyone.`
+        });
+      }
       res.send({
         user
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return next({
-        err,
-        status: 400,
-        msg: 'Invalid Username'
-      });
       next(err);
     });
 };

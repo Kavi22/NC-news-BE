@@ -21,8 +21,8 @@ describe('API/USERS', () => {
   });
 
   describe('GET /users/:username', () => {
-    it('responds with profile info for selected user', () => {
-      const username = usefulData.user.username;
+    it('returns 200 and responds with profile info for selected user', () => {
+      const {username} = usefulData.user;
       return request(server)
         .get(`/api/users/${username}`)
         .expect(200)
@@ -30,6 +30,19 @@ describe('API/USERS', () => {
           expect(res.body.user.username).to.equal(username);
         });
     });
+
+    it('returns 404 if invalid user info is provided', () => {
+      const username = 'superman';
+
+      return request(server)
+        .get(`/api/users/${username}`)
+        .expect(404)
+        .then(res => {
+          expect(res.status).to.equal(404);
+          expect(res.body.msg).to.equal(`Username, ${username}, is not been used by anyone.`);
+        });
+    });
+
   });
 
 });

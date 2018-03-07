@@ -84,7 +84,7 @@ describe('API/COMMENTS', () => {
     });
   });
 
-  describe.only('DELETE /comments/:comment_id', () => {
+  describe('DELETE /comments/:comment_id', () => {
     it('returns 200 and successfully deletes the selected comment from DB', () => {
       const {_id, belongs_to} = usefulData.comments[0];
       const comments = usefulData.comments.length;
