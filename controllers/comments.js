@@ -1,7 +1,7 @@
 const Comments = require('../models/comments');
 
 exports.getArticleComments = (req, res, next) => {
-  const article_id = req.params.article_id;
+  const {article_id} = req.params;
 
   Comments.find({
       belongs_to: article_id
@@ -21,8 +21,6 @@ exports.getArticleComments = (req, res, next) => {
       next(err);
     });
 };
-
-// TODO: error  handling on entering a  message?
 
 exports.addArticleComments = (req, res, next) => {
   const belongs_to = req.params.article_id;

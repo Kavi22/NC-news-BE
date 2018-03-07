@@ -9,7 +9,17 @@ function validateArticleId(req, res, next) {
     });
   }
   next();
+}
 
+function validateCommentId(req, res, next) {
+  const { comment_id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(comment_id)) {
+    return next({
+      status: 400,
+      msg: `Invalid article id : ${comment_id}`
+    });
+  }
+  next();
 }
 
 // function validateTopicId(req, res, next) {
@@ -25,6 +35,7 @@ function validateArticleId(req, res, next) {
 // }
 
 module.exports = {
-  validateArticleId
+  validateArticleId,
+  validateCommentId
   // validateTopicId
 };
