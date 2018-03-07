@@ -44,7 +44,6 @@ describe('API/COMMENTS', () => {
     it('returns 200 and successfully decrements votes on a selected comment', () => {
       const {_id,body, belongs_to, votes} = usefulData.comments[0];
       const article_id = usefulData.articles[0]._id;
-
       return request(server)
         .put(`/api/comments/${_id}?vote=down`)
         .expect(200)
@@ -55,9 +54,9 @@ describe('API/COMMENTS', () => {
           .expect(200);
         })
         .then(res => {
-          expect(res.body.comments[0].votes).to.equal(votes - 1);
-          expect(res.body.comments[0].belongs_to).to.equal(`${belongs_to}`);
-          expect(res.body.comments[0].body).to.equal(body);
+          expect(res.body.comments[1].votes).to.equal(votes - 1);
+          expect(res.body.comments[1].belongs_to).to.equal(`${belongs_to}`);
+          expect(res.body.comments[1].body).to.equal(body);
         });
     });
 

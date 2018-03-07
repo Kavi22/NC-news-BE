@@ -33,7 +33,6 @@ describe('API/USERS', () => {
 
     it('returns 404 if invalid user info is provided', () => {
       const username = 'superman';
-
       return request(server)
         .get(`/api/users/${username}`)
         .expect(404)
