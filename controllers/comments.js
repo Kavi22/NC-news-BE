@@ -6,6 +6,7 @@ exports.getArticleComments = (req, res, next) => {
   Comments.find({
       belongs_to: article_id
     })
+    .sort({ votes: 'desc', created_at: 'desc' })
     .then((comments) => {
       if (!comments.length) {
         return next({
