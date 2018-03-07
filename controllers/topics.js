@@ -2,10 +2,8 @@ const Topics = require('../models/topics');
 
 exports.getTopics = (req, res, next) => {
   Topics.find({})
-  // .sort({
-  //   title: 'asc'
-  // })
-  // .lean()
+  .sort({ title: 'asc'})
+
   .then((topics) => {
     if (!topics) {
       return next({

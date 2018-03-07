@@ -53,7 +53,7 @@ describe('API/TOPICS', () => {
       });
     });
 
-    describe('GET /topics/topic_id/articles', () => {
+    describe.only('GET /topics/topic_id/articles', () => {
       it('returns 200 and responds with all the articles for selected topic', () => {
         const topic = usefulData.topics[0].slug;
         return request(server)
@@ -76,6 +76,16 @@ describe('API/TOPICS', () => {
           .then(res => {
             expect(res.status).to.equal(404);
             expect(res.body.msg).to.equal(`No articles found for topic with ${topic}`);
+          });
+      });
+      it('returns topics sorted by title', () => {
+        return request (server)
+          .get('/api/topics')
+          .expect(200)
+          .then(res => {
+            expect(res.body.topics[0].title).to.equal('Cats');
+            expect(res.body.topics[1].title).to.equal('Cooking');
+            expect(res.body.topics[2].title).to.equal('Football');
           });
       });
     });
