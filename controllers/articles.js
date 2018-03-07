@@ -1,10 +1,11 @@
 const Articles = require('../models/articles');
 
 exports.getTopicArticles = (req, res, next) => {
-  const {topic_id} = req.params;
+  const { topic_id  } = req.params;
   Articles.find({
       belongs_to: topic_id
     })
+    .sort({ votes: 'desc', created_at: 'desc' })
     .then((articles) => {
       if (!articles.length) {
         return next({
@@ -23,6 +24,10 @@ exports.getTopicArticles = (req, res, next) => {
 
 exports.getAllArticles = (req, res, next) => {
   Articles.find({})
+    .sort({
+      votes: 'desc',
+      created_at: 'desc'
+    })
     .then((articles) => {
       if (!articles) {
         return next({
@@ -38,7 +43,7 @@ exports.getAllArticles = (req, res, next) => {
 };
 
 exports.getArticle = (req, res, next) => {
-  const {article_id} = req.params;
+  const { article_id } = req.params;
 
   Articles.findById(article_id)
     .then((article) => {
@@ -59,8 +64,8 @@ exports.getArticle = (req, res, next) => {
 
 exports.increaseDecreaseArticleVotes = (req, res, next) => {
 
-  const {article_id} = req.params;
-  const {vote} = req.query;
+  const { article_id } = req.params;
+  const { vote } = req.query;
 
   if (vote !== 'up' && vote !== 'down') {
     return res.status(404).json({

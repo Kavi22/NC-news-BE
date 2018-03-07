@@ -53,7 +53,7 @@ describe('API/TOPICS', () => {
       });
     });
 
-    describe.only('GET /topics/topic_id/articles', () => {
+    describe('GET /topics/topic_id/articles', () => {
       it('returns 200 and responds with all the articles for selected topic', () => {
         const topic = usefulData.topics[0].slug;
         return request(server)
