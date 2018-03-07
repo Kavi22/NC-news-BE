@@ -12,6 +12,19 @@ function validateArticleId(req, res, next) {
 
 }
 
+// function validateTopicId(req, res, next) {
+//   const { topic_id } = req.params;
+//   if (!mongoose.Types.ObjectId.isValid(topic_id)) {
+//     return next({
+//       status: 400,
+//       msg: `Invalid topic id : ${topic_id}`
+//     });
+//   }
+//   next();
+
+// }
+
 module.exports = {
   validateArticleId
+  // validateTopicId
 };

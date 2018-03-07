@@ -38,7 +38,7 @@ describe('API/TOPICS', () => {
 
     // with  promises
     describe('GET /topics', () => {
-      it('responds with all the topics', () => {
+      it('returns 200 and responds with all the topics', () => {
         return request(server)
           .get('/api/topics')
           .expect(200)
@@ -46,6 +46,7 @@ describe('API/TOPICS', () => {
             expect(res.body.topics.length).to.equal(3);
             res.body.topics.forEach(topic => {
               expect(topic.title).to.be.a('string');
+              expect(topic.slug).to.be.a('string');
               expect(topic.slug).to.equal(topic.title.toLowerCase());
             });
           });
@@ -53,7 +54,7 @@ describe('API/TOPICS', () => {
     });
 
     describe('GET /topics/topic_id/articles', () => {
-      it('responds with all the articles for selected topic', () => {
+      it('returns 200 and responds with all the articles for selected topic', () => {
         const topic = usefulData.topics[0].slug;
         return request(server)
           .get(`/api/topics/${topic}/articles`)
@@ -61,7 +62,20 @@ describe('API/TOPICS', () => {
           .then(res => {
             res.body.articles.forEach(article => {
               expect(article.belongs_to).to.equal(topic);
+              expect(article.title).to.be.a('string');
+              expect(article.body).to.be.a('string');
+              expect(article.votes).to.be.a('number');
             });
+          });
+      });
+      it('returns 404 when invalid topic has been passed', () => {
+        const topic = 'batman';
+        return request (server)
+          .get(`/api/topics/${topic}/articles`)
+          .expect(404)
+          .then(res => {
+            expect(res.status).to.equal(404);
+            expect(res.body.msg).to.equal(`No articles found for topic with ${topic}`);
           });
       });
     });
