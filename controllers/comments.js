@@ -7,6 +7,12 @@ exports.getArticleComments = (req, res, next) => {
       belongs_to: article_id
     })
     .then((comments) => {
+      if (!comments.length) {
+        return next({
+          status: 404,
+          msg: `Article id ${article_id} has no comments`
+        });
+      }
       res.send({
         comments
       });
@@ -26,6 +32,7 @@ exports.addArticleComments = (req, res, next) => {
     belongs_to,
     body
   });
+  
   createComment.save()
     .then((comment) => {
       res.send({
