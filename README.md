@@ -30,7 +30,7 @@ If you do not already have git installed on your machine please follow [this gui
 
 If you do not have MongoDB already installed, please follow [this guide](https://docs.mongodb.com/manual/installation/)
 
-#* Installation
+# Installation
 
 To run this project on your local machine you will need to clone it onto your machine and install all dependencies.
 
