@@ -5,7 +5,8 @@
   "main": "config.js",
   "scripts": {
     "test": "mocha ./spec",
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "localStart": "nodemon server.js",
     "lint": "eslint ./ --fix",
     "posttest": "npm run lint",
     "precommit": "npm test"
