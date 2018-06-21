@@ -12,7 +12,7 @@ const PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
 mongoose.Promise = Promise;
 
 mongoose.connect(db, () => {
-  console.log('connected to db');
+  console.log('connected to db!');
   console.log('db: ' + db);
 });
 
