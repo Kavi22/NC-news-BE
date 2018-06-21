@@ -13,6 +13,7 @@ mongoose.Promise = Promise;
 
 mongoose.connect(db, () => {
   console.log('connected to db');
+  console.log('db: ' + db);
 });
 
 app.use(bodyParser.json());
@@ -30,9 +31,9 @@ app.use((err, req, res, next) => {
   return res.status(err.status).send({ msg: err.msg });
 });
 
-app.use((err, req, res) => {
-  res.status(500).send({ err });
-});
+// app.use((err, req, res) => {
+//   res.status(500).send({ err });
+// });
 
 app.listen(PORT, function () {
   console.log(`listening on port ${PORT}`);

@@ -1,3 +1,5 @@
+if (!process.env.NODE_ENV) process.env.NODE_ENV = "dev";
+
 var models = require('../models/models');
 var userData = require('./data/user_data.js');
 var articleData = require('./data/articles');
