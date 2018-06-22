@@ -12,10 +12,11 @@ var log4js = require('log4js');
 var logger = log4js.getLogger();
 var moment = require('moment');
 var DBs = require('../config').DB;
+const db = DBs[process.env.NODE_ENV] || process.env.DB;
 
-mongoose.connect(DBs.dev, function (err) {
+mongoose.connect('mongodb://nc-news22:nc-news22@ds263660.mlab.com:63660/nc-news-18', function (err) {
   if (!err) {
-    logger.info(`connected to database ${DBs.dev}`);
+    logger.info(`connected to database ${db}`);
     mongoose.connection.db.dropDatabase();
     async.waterfall([
       addUsers,

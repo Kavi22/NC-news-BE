@@ -1,5 +1,17 @@
 const Users = require('../models/users');
 
+exports.getAllUsers = (req, res, next) => {
+  Users.find({})
+    .then((users) => {
+      res.send({
+        users
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 exports.getUsers = (req, res, next) => {
 const {username} = req.params;
 
