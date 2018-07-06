@@ -3,6 +3,12 @@ const Users = require('../models/users');
 exports.getAllUsers = (req, res, next) => {
   Users.find({})
     .then((users) => {
+      if(!users) {
+        return next({
+            status: 404,
+            msg: 'No users found'
+        });
+      }
       res.send({
         users
       });
