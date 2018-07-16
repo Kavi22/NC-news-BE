@@ -1,4 +1,5 @@
 const Users = require('../models/users');
+const Articles = require('../models/articles');
 
 exports.getAllUsers = (req, res, next) => {
   Users.find({})
@@ -21,21 +22,22 @@ exports.getAllUsers = (req, res, next) => {
 exports.getUsers = (req, res, next) => {
 const {username} = req.params;
 
-  Users.findOne({
-      username
-    })
-    .then((user) => {
-      if (!user) {
+Promise.all([Users.findOne({username}), Articles.find({created_by: username})])
+.then(results => {
+    const [user, articles] = results;
+
+    if (!user) {
         return next({
-          status: 404,
-          msg: `Username, ${username}, is not been used by anyone.`
+            status: 404,
+            msg: `Username, ${username}, is not been used by anyone.`
         });
-      }
+    }
       res.send({
-        user
-      });
-    })
-    .catch((err) => {
+          user,
+          articles
+      })
+})
+    .catch(err => {
       next(err);
-    });
+    })
 };
