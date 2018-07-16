@@ -22,6 +22,28 @@ exports.getTopicArticles = (req, res, next) => {
     });
 };
 
+exports.getUserArticles = (req, res, next) => {
+    const { username  } = req.params;
+    Articles.find({
+        created_by: username
+    })
+        .sort({ votes: 'desc', created_at: 'desc' })
+        .then((articles) => {
+            if (!articles.length) {
+                return next({
+                    status: 404,
+                    msg: `No articles found for username with ${username}`
+                });
+            }
+            res.send({
+                articles
+            });
+        })
+        .catch((err) => {
+            next(err);
+        });
+};
+
 exports.getAllArticles = (req, res, next) => {
   Articles.find({})
     .sort({
